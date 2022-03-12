@@ -1,4 +1,9 @@
-// define contract to create an instance of IPayment
+// define contract to create an instance of a class
+interface IAccount {
+    holder: string;
+    accountType: 'individual' | 'legal';
+}
+
 interface IPayment {
     customer: string;
     paymentMode: string;
@@ -7,38 +12,31 @@ interface IPayment {
     receivePayment(value: number): void;
 }
 
-interface ICorporations extends IPayment {
+// inheritance
+interface ICorporations extends IAccount {
     groupName: string;
     partnersList: string[];
     addPartner(name: string): void;
 }
 
+// types in Typescript are used to join different interfaces usually
+type ISystem = IAccount | ICorporations
+
 const fintech: ICorporations = {
-    customer: 'industries',
-    paymentMode: 'cash',
-    myMoney: 10000,
+    holder: 'fulano',
+    accountType: 'legal',
     groupName: 'Zitz SA',
     partnersList: ['Zitz company'],
     addPartner: (name) => {
         fintech.partnersList.push(name);
         console.log(fintech.partnersList);
-    },
-    payCustomer: (billValue) => {
-        banco.myMoney -= billValue;
-        console.log(`The bill cost an amount of U$$ ${billValue}. Your new balance is ${banco.myMoney}`);
-
-    },
-    receivePayment: (value) => {
-        banco.myMoney += value;
-        console.log(`You received ${value}. Your new balance is ${banco.myMoney}`);
     }
 }
-
 
 const banco: IPayment = {
-    customer: 'Igor',
-    paymentMode: 'credit card',
-    myMoney: 15,
+    customer: '',
+    paymentMode: '',
+    myMoney: 1000,
     payCustomer: (billValue) => {
         banco.myMoney -= billValue;
         console.log(`The bill cost an amount of U$$ ${billValue}. Your new balance is ${banco.myMoney}`);
@@ -51,9 +49,11 @@ const banco: IPayment = {
 
 }
 
-// basic operations
+// basic operations - Payment
 banco.payCustomer(8)
 banco.receivePayment(50);
+
+// basic operations - corporations
 fintech.addPartner('Money fintech');
 fintech.addPartner('Nice bank');
 fintech.addPartner('Bank and bank');
